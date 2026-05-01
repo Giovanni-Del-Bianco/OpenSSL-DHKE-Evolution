@@ -294,13 +294,13 @@ make all
 In this step, the C program only handles the secret derivation. You must generate the keys manually via CLI first.
 
 1. **Generate Group Parameters**:
-   ```bash
+```bash
    ./scripts/gen_dh_params.sh
    
 ```
 
 2. **Generate Keys via CLI**:
-   ```bash
+```bash
    # Alice's Keys
    openssl genpkey -paramfile dhparams.pem -out alice_priv.pem
    openssl pkey -in alice_priv.pem -pubout -out alice_pub.pem
@@ -308,12 +308,12 @@ In this step, the C program only handles the secret derivation. You must generat
    # Bob's Keys
    openssl genpkey -paramfile dhparams.pem -out bob_priv.pem
    openssl pkey -in bob_priv.pem -pubout -out bob_pub.pem
-   ```
+```
 
 3. **Run Derivation**:
-   ```bash
+```bash
    ./bin/dh_manual alice_priv.pem bob_pub.pem
-   ```
+```
 
 
 #### 🟡 Phase 2: Elliptic Curve DH (Step 2)
