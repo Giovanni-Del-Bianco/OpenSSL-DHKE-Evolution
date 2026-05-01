@@ -296,7 +296,6 @@ In this step, the C program only handles the secret derivation. You must generat
 1. **Generate Group Parameters**:
 ```bash
    ./scripts/gen_dh_params.sh
-   
 ```
 
 2. **Generate Keys via CLI**:
@@ -310,9 +309,11 @@ In this step, the C program only handles the secret derivation. You must generat
    openssl pkey -in bob_priv.pem -pubout -out bob_pub.pem
 ```
 
-3. **Run Derivation**:
+3. **Run Derivation & Encryption**:
+Ensure a copy of `plain_text.txt` is in your current directory:
 ```bash
-   ./bin/dh_manual alice_priv.pem bob_pub.pem
+cp samples/plain_text.txt .
+./bin/dh_manual alice_priv.pem bob_pub.pem
 ```
 
 
