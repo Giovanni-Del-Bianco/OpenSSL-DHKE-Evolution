@@ -295,18 +295,18 @@ In this step, the C program only handles the secret derivation. You must generat
 
 1. **Generate Group Parameters**:
 ```bash
-   ./scripts/gen_dh_params.sh
+./scripts/gen_dh_params.sh
 ```
 
 2. **Generate Keys via CLI**:
 ```bash
-   # Alice's Keys
-   openssl genpkey -paramfile dhparams.pem -out alice_priv.pem
-   openssl pkey -in alice_priv.pem -pubout -out alice_pub.pem
+# Alice's Keys
+openssl genpkey -paramfile dhparams.pem -out alice_priv.pem
+openssl pkey -in alice_priv.pem -pubout -out alice_pub.pem
 
-   # Bob's Keys
-   openssl genpkey -paramfile dhparams.pem -out bob_priv.pem
-   openssl pkey -in bob_priv.pem -pubout -out bob_pub.pem
+# Bob's Keys
+openssl genpkey -paramfile dhparams.pem -out bob_priv.pem
+openssl pkey -in bob_priv.pem -pubout -out bob_pub.pem
 ```
 
 3. **Run Derivation & Encryption**:
