@@ -286,44 +286,68 @@ cd OpenSSL-DHKE-Evolution
 make all
 ```
 
-### 7.3. Step-by-Step Execution Guide
 
-#### Steps 1 & 3: Classic DH & API Keygen
-These steps require external parameters ($p$ and $g$). Use the provided automation script to generate them:
+### 7.3. Step-by-Step Evolution Guide
 
-1.  **Generate Parameters**: `./scripts/gen_dh_params.sh`.
-2.  **Run Alice & Bob**: Launch two terminals and run the binaries from the `/bin` folder, ensuring you exchange the `.pem` public keys manually when prompted.
+Before starting, ensure all binaries are compiled by running `make all` in your root directory.
 
-#### Step 2: Elliptic Curve DH (ECDH)
-This step is faster as it uses the `prime256v1` curve directly.
-```bash
-./bin/ecdh_lab <my_private.pem> <peer_public.pem>
-```
+#### 🟢 Phase 1: Classic DH (Steps 1 & 3)
+These steps require external mathematical parameters. We must generate a 2048-bit prime group first.
 
-#### Step 4: Full Automation (The Final Solution)
-The most advanced version is fully automated. You can use the dedicated test script or run it manually to observe the "interleaved" synchronization.
+1.  **Generate Parameters**:
+    ```bash
+    ./scripts/gen_dh_params.sh
+    ```
+2.  **Execution (Step 1 - Manual Derivation)**:
+    Open two terminals to simulate Alice and Bob:
+    *   **Alice**: `./bin/dh_manual dhparams.pem alice_priv.pem alice_pub.pem bob_pub.pem`
+    *   **Bob**: `./bin/dh_manual dhparams.pem bob_priv.pem bob_pub.pem alice_pub.pem`
+3.  **Execution (Step 3 - API Keygen)**:
+    *   **Alice**: `./bin/dh_api_keygen dhparams.pem Alice`
+    *   **Bob**: `./bin/dh_api_keygen dhparams.pem Bob`
 
-**Using the Automated Setup Script:**
+
+
+#### 🟡 Phase 2: Elliptic Curve DH (Step 2)
+This version uses the `prime256v1` curve. It is faster and doesn't require the `dhparams.pem` file.
+
+*   **Alice**: `./bin/ecdh_lab alice_priv.pem bob_pub.pem`
+*   **Bob**: `./bin/ecdh_lab bob_priv.pem alice_pub.pem`
+
+
+#### 🔴 Phase 3: The Final Solution (Step 4)
+This is the fully automated version. Parameters and keys are generated internally. It includes the complete AES-128-CBC file encryption workflow.
+
+**Interleaved Synchronization Logic:**
+To succeed, you must coordinate the two terminals following the "handshake" logic:
+
+| Action | Terminal Alice | Terminal Bob |
+| :--- | :--- | :--- |
+| **1. Start** | `./bin/dh_full Alice Bob` | `./bin/dh_full Bob Alice` |
+| **2. Key Exchange** | Wait for `Alice_pub.pem` | Wait for `Bob_pub.pem` |
+| **3. Derive Secret** | Press **ENTER** | Press **ENTER** |
+| **4. Verify** | Alice decrypts Bob's file | Bob decrypts Alice's file |
+
+
+### 🧪 7.4. Automated Verification Script
+If you want to quickly verify the final step (Step 4) without manual input, use the provided test script:
 ```bash
 chmod +x scripts/*.sh
 ./scripts/run_test_interleaved.sh
 ```
 
-**Manual Execution (Simulation):**
-1.  **Terminal Alice**: `./bin/dh_full Alice Bob`
-2.  **Terminal Bob**: `./bin/dh_full Bob Alice`
-3.  **Synchronization**:
-    *   Alice writes her public key and waits.
-    *   Bob writes his public key and waits.
-    *   Press **ENTER** in both terminals to derive the secret.
-    *   Alice/Bob encrypt their respective messages.
-    *   Press **ENTER** again to perform the cross-decryption verification.
 
-### 7.4. Environment Cleanup
-To reset the repository and remove all binaries, generated keys, and encrypted files:
+### 🧹 7.5. Environment Cleanup
+To maintain a clean workspace and remove all compiled binaries, temporary PEM keys, and encrypted test files, simply run:
 ```bash
 make clean
 ```
+
+
+### 💡 Execution Note: The "Exchange" Logic
+Since we are simulating a network on a local machine, "exchanging keys" means Alice waits for Bob to write his `.pem` file to the disk before she tries to read it. Always wait for both programs to reach the **"Press ENTER"** prompt before proceeding in either terminal.
+
+
 
 
 ## 📜 License
