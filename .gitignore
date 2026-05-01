@@ -1,0 +1,22 @@
+# --- Build Artifacts ---
+bin/
+*.o
+*.out
+
+# --- Sensitive Cryptographic Objects ---
+*.pem
+*.key
+
+# --- Encrypted Files ---
+*.enc
+samples/*.enc
+
+# --- Temporary Test Files ---
+Alice_plain.txt
+Bob_plain.txt
+Alice_cipher.enc
+Bob_cipher.enc
+
+# --- OS Specific ---
+.DS_Store
+Thumbs.db

@@ -1,0 +1,9 @@
+CONFIDENTIAL - DATA SECURITY SYSTEMS LAB
+-----------------------------------------
+This message is used to verify the correct implementation
+of the Diffie-Hellman Key Exchange (DHKE) protocol and hybrid encryption.
+
+If you are reading this text after decryption, it means that:
+1. The ephemeral key exchange was successful.
+2. SHA-256 derivation generated the correct symmetric key.
+3. AES-128-CBC maintained message integrity.
