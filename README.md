@@ -289,23 +289,31 @@ make all
 
 ### 7.3. Step-by-Step Evolution Guide
 
-Before starting, ensure all binaries are compiled by running `make all` in your root directory.
 
-#### 🟢 Phase 1: Classic DH (Steps 1 & 3)
-These steps require external mathematical parameters. We must generate a 2048-bit prime group first.
+#### 🟢 Phase 1: Classic DH (Step 1 - Manual Logic)
+In this step, the C program only handles the secret derivation. You must generate the keys manually via CLI first.
 
-1.  **Generate Parameters**:
-    ```bash
-    ./scripts/gen_dh_params.sh
-    ```
-2.  **Execution (Step 1 - Manual Derivation)**:
-    Open two terminals to simulate Alice and Bob:
-    *   **Alice**: `./bin/dh_manual dhparams.pem alice_priv.pem alice_pub.pem bob_pub.pem`
-    *   **Bob**: `./bin/dh_manual dhparams.pem bob_priv.pem bob_pub.pem alice_pub.pem`
-3.  **Execution (Step 3 - API Keygen)**:
-    *   **Alice**: `./bin/dh_api_keygen dhparams.pem Alice`
-    *   **Bob**: `./bin/dh_api_keygen dhparams.pem Bob`
+1. **Generate Group Parameters**:
+   ```bash
+   ./scripts/gen_dh_params.sh
+   
+```
 
+2. **Generate Keys via CLI**:
+   ```bash
+   # Alice's Keys
+   openssl genpkey -paramfile dhparams.pem -out alice_priv.pem
+   openssl pkey -in alice_priv.pem -pubout -out alice_pub.pem
+
+   # Bob's Keys
+   openssl genpkey -paramfile dhparams.pem -out bob_priv.pem
+   openssl pkey -in bob_priv.pem -pubout -out bob_pub.pem
+   ```
+
+3. **Run Derivation**:
+   ```bash
+   ./bin/dh_manual alice_priv.pem bob_pub.pem
+   ```
 
 
 #### 🟡 Phase 2: Elliptic Curve DH (Step 2)
